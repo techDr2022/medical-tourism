@@ -20,4 +20,4 @@ Open http://localhost:3000
 4. Add your Google Ads `gtag` snippet in `app/layout.tsx` or a dedicated analytics component.
 5. Replace `track()` with your Google Ads conversion event ID/label.
 6. Confirm package prices, inclusions, hospital stay and "First 50 patients only" offer before publishing.
-7. Add privacy policy, terms, consent wording and any required medical advertising disclosures.
+7. Confirm privacy policy, terms, advertising disclosure and medical advertising notices are live before launching Google Ads.

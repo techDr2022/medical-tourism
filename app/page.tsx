@@ -1,6 +1,11 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import {
+  company,
+  companyLegalLine,
+  companySignatoryLine,
+} from "@/lib/company";
 
 const packages = [
   {
@@ -35,13 +40,10 @@ const packages = [
 
 const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
+const whatsappMessage = `Hello ${company.brand}, I am interested in joint replacement treatment.`;
 const whatsappHref = whatsappNumber
-  ? `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${encodeURIComponent(
-      "Hello Medical Tourism, I am interested in joint replacement treatment."
-    )}`
-  : `https://wa.me/?text=${encodeURIComponent(
-      "Hello Medical Tourism, I am interested in joint replacement treatment."
-    )}`;
+  ? `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${encodeURIComponent(whatsappMessage)}`
+  : `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`;
 
 declare global {
   interface Window {
@@ -82,28 +84,37 @@ export default function Home() {
     setFormError("");
     setSubmitting(true);
 
+    const form = e.currentTarget;
+
     try {
+      const formData = new FormData(form);
+
       if (recaptchaSiteKey) {
         const token = await getRecaptchaToken("lead_submit");
         if (!token) {
           setFormError("Security check failed to load. Please refresh and try again.");
           return;
         }
+        formData.set("recaptchaToken", token);
+      }
 
-        const verify = await fetch("/api/verify-recaptcha", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ token, action: "lead_submit" }),
-        });
+      const res = await fetch("/api/lead", {
+        method: "POST",
+        body: formData,
+      });
 
-        if (!verify.ok) {
-          setFormError("Security verification failed. Please try again.");
-          return;
-        }
+      const data = (await res.json().catch(() => null)) as
+        | { ok?: boolean; error?: string }
+        | null;
+
+      if (!res.ok || !data?.ok) {
+        setFormError(data?.error || "Could not submit your enquiry. Please try again.");
+        return;
       }
 
       track("joint_replacement_lead");
       setSubmitted(true);
+      form.reset();
     } catch {
       setFormError("Something went wrong. Please try again.");
     } finally {
@@ -114,10 +125,12 @@ export default function Home() {
   return (
     <main>
       <header className="siteHeader">
-        <div className="topbar">Medical Tourism • International Patient Care • Hyderabad, India</div>
+        <div className="topbar">
+          {company.website} • International Patient Care • {company.cityLabel}
+        </div>
         <nav className="nav container">
           <a className="brand" href="#">
-            <img className="brandLogo" src="/logo.png" alt="Medical Tourism by TechDr" />
+            <img className="brandLogo" src="/logo.png" alt={company.brand} />
           </a>
           <a
             className="navCta"
@@ -133,22 +146,22 @@ export default function Home() {
         <div className="container heroGrid">
           <div className="heroCopy">
             <div className="eyebrow">JOINT REPLACEMENT • HYDERABAD, INDIA</div>
-            <h1>Move better.<br /><span>Live without joint pain.</span></h1>
+            <h1>Move better.<br /><span>Explore joint replacement options.</span></h1>
             <p className="heroLead">
               Explore knee and hip replacement treatment options in India with coordinated
-              care for international patients.
+              care for international patients. Outcomes vary; specialist assessment required.
             </p>
 
             <div className="urgency">
-              <strong>First 50 patients only</strong>
-              <span>Priority treatment planning & international-patient coordination</span>
+              <strong>Limited priority planning slots</strong>
+              <span>Subject to clinical suitability &amp; international-patient coordination capacity</span>
             </div>
 
             <div className="heroBullets">
-              <div><i>✓</i> Experienced orthopaedic specialists</div>
-              <div><i>✓</i> International-brand implant options</div>
-              <div><i>✓</i> Single-room package estimates</div>
-              <div><i>✓</i> Travel & medical visa guidance</div>
+              <div><i>✓</i> Dedicated patient coordinator</div>
+              <div><i>✓</i> Free airport pickup &amp; drop</div>
+              <div><i>✓</i> Language interpreters</div>
+              <div><i>✓</i> Video consultation when suitable</div>
             </div>
 
             <a
@@ -158,7 +171,7 @@ export default function Home() {
             >
               Send Medical Reports →
             </a>
-            <p className="microcopy">Get a preliminary review & treatment plan.</p>
+            <p className="microcopy">Get a preliminary review, video consult option &amp; treatment plan.</p>
           </div>
 
           <div className="heroVisual">
@@ -176,10 +189,10 @@ export default function Home() {
 
       <section className="trust">
         <div className="container trustGrid">
-          <span>✓ International patient coordination</span>
-          <span>✓ Transparent package estimates</span>
-          <span>✓ Travel & stay assistance</span>
-          <span>✓ Multi-language support</span>
+          <span>✓ Dedicated coordinator</span>
+          <span>✓ Free airport pickup &amp; drop</span>
+          <span>✓ Language interpreters</span>
+          <span>✓ Video consultation*</span>
         </div>
       </section>
 
@@ -253,6 +266,37 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="section" id="patient-support">
+        <div className="container">
+          <div className="sectionHead">
+            <div>
+              <div className="eyebrow">INTERNATIONAL PATIENT SUPPORT</div>
+              <h2>Coordinated care beyond the hospital</h2>
+            </div>
+            <p>
+              Support services arranged by {company.brand} for international patients.
+              Availability of video consultation depends on case suitability and specialist schedule.
+            </p>
+          </div>
+          <div className="includeGrid supportGrid">
+            {[
+              ["01", "Dedicated coordinator", "One point of contact for appointments, travel planning and on-ground support."],
+              ["02", "Free airport pickup & drop", "Airport transfers arranged for your arrival and departure in Hyderabad."],
+              ["03", "Language interpreters", "Interpreter support to help you communicate during consultations and hospital stay."],
+              ["04", "Video consultation*", "Remote specialist discussion when clinically suitable, before you travel."],
+            ].map(([n, t, d]) => (
+              <div className="include" key={n}>
+                <span>{n}</span><div><h3>{t}</h3><p>{d}</p></div>
+              </div>
+            ))}
+          </div>
+          <p className="supportNote">
+            *Video consultation is offered when appropriate after review of your reports and subject to
+            specialist availability. It does not replace in-person clinical assessment before surgery.
+          </p>
+        </div>
+      </section>
+
       <section className="journey section">
         <div className="container">
           <div className="sectionHead centered">
@@ -264,9 +308,9 @@ export default function Home() {
           <div className="steps">
             {[
               ["1", "Send reports", "Share your scans, reports and treatment history."],
-              ["2", "Specialist review", "We coordinate a preliminary clinical review."],
+              ["2", "Review & video option", "We coordinate a preliminary review; video consult when suitable."],
               ["3", "Receive options", "Get hospital, doctor and package options."],
-              ["4", "Plan your trip", "Coordinate appointments, travel and stay."],
+              ["4", "Travel with support", "Coordinator, airport transfer, interpreters and stay planning."],
             ].map(([n, t, d]) => (
               <div className="step" key={n}>
                 <b>{n}</b><h3>{t}</h3><p>{d}</p>
@@ -282,8 +326,8 @@ export default function Home() {
             <div className="eyebrow light">START YOUR CASE REVIEW</div>
             <h2>Know your treatment options before you travel.</h2>
             <p>
-              Send your medical details and our patient coordination team can help you
-              understand the next steps, expected stay and package options.
+              Send your medical details and your dedicated coordinator can help with next steps,
+              expected stay, package options and — when suitable — a video consultation before travel.
             </p>
             <div className="secure">🔒 Your information is used for patient coordination and enquiry handling.</div>
           </div>
@@ -313,18 +357,29 @@ export default function Home() {
                   <option>Bilateral hip replacement</option>
                   <option>Not sure — need guidance</option>
                 </select>
+                <select name="travel_timeline" defaultValue="" required>
+                  <option value="" disabled>When are you planning to travel to India?</option>
+                  <option>As soon as possible</option>
+                  <option>Within 1 month</option>
+                  <option>1–3 months</option>
+                  <option>3–6 months</option>
+                  <option>6+ months</option>
+                  <option>Not sure yet</option>
+                </select>
                 <textarea name="message" placeholder="Briefly describe the condition or treatment history" rows={3} />
                 <label className="upload">
                   <span>📎</span>
                   <div><b>Medical reports</b><small>Optional • PDF/JPG/PNG</small></div>
-                  <input type="file" accept=".pdf,.jpg,.jpeg,.png" />
+                  <input type="file" name="reports" accept=".pdf,.jpg,.jpeg,.png" />
                 </label>
                 {formError ? <p className="formError">{formError}</p> : null}
                 <button className="submitBtn" type="submit" disabled={submitting}>
-                  {submitting ? "Verifying…" : "Request My Treatment Plan →"}
+                  {submitting ? "Sending…" : "Request My Treatment Plan →"}
                 </button>
                 <small className="formFine">
-                  By submitting, you agree to be contacted about your enquiry.
+                  By submitting, you agree to be contacted about your enquiry and accept our{" "}
+                  <a href="/privacy">Privacy Policy</a> and <a href="/terms">Terms of Service</a>.
+                  Package figures are estimates only and do not constitute medical advice.
                   {recaptchaSiteKey ? (
                     <>
                       {" "}This site is protected by reCAPTCHA and the Google{" "}
@@ -346,8 +401,11 @@ export default function Home() {
           <div className="eyebrow">COMMON QUESTIONS</div>
           <h2>Before you plan your treatment</h2>
           {[
+            ["Who provides the medical treatment?", `${company.brand} coordinates international patient support. Clinical care, surgery, and hospital services are provided by the treating hospital and licensed specialists after assessment. We do not operate an online pharmacy or remote prescribing service.`],
             ["Are these final treatment prices?", "No. These are approximate package estimates. The final treatment plan, implant selection, and package confirmation will follow specialist consultation, clinical assessment, and review of all relevant investigations. Any additional hospital stay or treatment beyond the agreed package will be charged separately."],
-            ["Can international patients get travel support?", "Medical Tours India can coordinate support related to appointments, medical visa guidance, accommodation and local travel arrangements."],
+            ["Are treatment outcomes guaranteed?", "No. Individual results vary. Suitability for joint replacement and expected outcomes can only be determined by a qualified clinician after assessment."],
+            [`Can international patients get travel support?`, `Yes. ${company.brand} can arrange a dedicated coordinator, free airport pickup and drop, language interpreter support, accommodation and medical visa guidance.`],
+            ["Is video consultation available?", "Video consultation may be arranged when clinically suitable after your reports are reviewed, and subject to specialist availability. It does not replace in-person assessment before surgery."],
             ["Can I send reports before travelling?", "Yes. You can submit your reports and treatment history through the enquiry form so the case can be reviewed before you make travel arrangements."],
             ["What is included in the package?", "Package inclusions cover joint replacement surgery as specified, international-brand implant(s), pharmacy and medical consumables used during the included hospital stay, single-room accommodation for the stated duration, and patient meals during the included hospital stay."],
             ["How do bilateral packages work?", "Bilateral packages cover both joints, with surgery performed in two separate stages. The stated hospital stay is the total included across both stages. The interval between surgeries will be determined by the treating orthopaedic surgeon."],
@@ -360,19 +418,54 @@ export default function Home() {
       <footer>
         <div className="container footerInner">
           <div className="footerBrand">
-            <img className="brandLogo footerLogo" src="/logo.png" alt="Medical Tourism by TechDr" />
-            <p>International patient coordination for joint replacement treatment in Hyderabad, India.</p>
+            <img className="brandLogo footerLogo" src="/logo.png" alt={company.brand} />
+            <p>
+              International patient coordination for joint replacement treatment in
+              Hyderabad, India.
+            </p>
+            <p className="footerLegal">
+              {companyLegalLine}
+              <br />
+              Authorized Signatory: {companySignatoryLine}
+            </p>
+            <p className="footerAddress">{company.registeredAddress}</p>
+            <p className="footerIds">
+              GSTIN: {company.gstin} · PAN: {company.pan} · TAN: {company.tan}
+            </p>
           </div>
           <div className="footerMeta">
             <strong>Ready to start?</strong>
-            <a href="#consultation" onClick={() => track("footer_cta_click")}>Get Treatment Plan →</a>
-            <span>Hyderabad, India</span>
+            <a href="#consultation" onClick={() => track("footer_cta_click")}>
+              Get Treatment Plan →
+            </a>
+            <span>{company.cityLabel}</span>
+            <a href={`mailto:${company.contactEmail}`}>{company.contactEmail}</a>
+            <div className="footerLinks">
+              <a href="/privacy">Privacy Policy</a>
+              <a href="/terms">Terms of Service</a>
+              <a href="/advertising-disclosure">Advertising Disclosure</a>
+            </div>
+          </div>
+        </div>
+        <div className="adsDisclaimer">
+          <div className="container">
+            <p>
+              <strong>Healthcare advertising notice:</strong> {company.brand} is a
+              medical tourism coordination service operated by {company.legalEntity}{" "}
+              ({company.tradeName}). Package prices are estimates only. Content is not
+              medical advice and does not guarantee clinical outcomes. Treatment is
+              provided by hospitals and licensed specialists after assessment. See our{" "}
+              <a href="/advertising-disclosure">Advertising Disclosure</a>.
+            </p>
           </div>
         </div>
         <div className="footerBase">
           <div className="container footerBaseInner">
-            <span>© {new Date().getFullYear()} Medical Tourism by TechDr</span>
-            <span>Package estimates only • Specialist confirmation required</span>
+            <span>
+              © {new Date().getFullYear()} {company.brand} · {company.tradeName} ·{" "}
+              {company.website}
+            </span>
+            <span>Package estimates only • Specialist confirmation required • No outcome guarantees</span>
           </div>
         </div>
       </footer>
