@@ -1,126 +1,21 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import Link from "next/link";
 import {
   company,
   companyLegalLine,
   companySignatoryLine,
 } from "@/lib/company";
-
-const packages = [
-  {
-    name: "Single Knee Replacement",
-    price: "USD 2,900",
-    stay: "3 days",
-    note: "single room",
-    image: "/Single-Knee-Replacement.png",
-  },
-  {
-    name: "Bilateral Knee Replacement",
-    price: "USD 5,000",
-    stay: "6 days total",
-    note: "single room • two stages",
-    image: "/Bilateral-Knee-Replacement.png",
-  },
-  {
-    name: "Single Hip Replacement",
-    price: "USD 3,500",
-    stay: "4 days",
-    note: "single room",
-    image: "/Single-Hip-Replacement.png",
-  },
-  {
-    name: "Bilateral Hip Replacement",
-    price: "USD 6,500",
-    stay: "6 days total",
-    note: "single room • two stages",
-    image: "/Bilateral-Hip-Replacement.png",
-  },
-];
-
-const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
-const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
-const whatsappMessage = `Hello ${company.brand}, I am interested in joint replacement treatment.`;
-const whatsappHref = whatsappNumber
-  ? `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${encodeURIComponent(whatsappMessage)}`
-  : `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`;
-
-declare global {
-  interface Window {
-    grecaptcha?: {
-      ready: (cb: () => void) => void;
-      execute: (siteKey: string, options: { action: string }) => Promise<string>;
-    };
-    gtag?: (...args: unknown[]) => void;
-  }
-}
-
-function track(eventName: string) {
-  if (typeof window !== "undefined") {
-    window.gtag?.("event", eventName);
-  }
-}
-
-async function getRecaptchaToken(action: string) {
-  if (!recaptchaSiteKey || !window.grecaptcha) return null;
-
-  return new Promise<string>((resolve, reject) => {
-    window.grecaptcha!.ready(() => {
-      window
-        .grecaptcha!.execute(recaptchaSiteKey, { action })
-        .then(resolve)
-        .catch(reject);
-    });
-  });
-}
+import { LeadForm, getWhatsappHref, trackClick } from "@/components/LeadForm";
+import {
+  journeySteps,
+  packageInclusions,
+  packages,
+  supportServices,
+} from "@/lib/packages";
 
 export default function Home() {
-  const [submitted, setSubmitted] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [formError, setFormError] = useState("");
-
-  async function submit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setFormError("");
-    setSubmitting(true);
-
-    const form = e.currentTarget;
-
-    try {
-      const formData = new FormData(form);
-
-      if (recaptchaSiteKey) {
-        const token = await getRecaptchaToken("lead_submit");
-        if (!token) {
-          setFormError("Security check failed to load. Please refresh and try again.");
-          return;
-        }
-        formData.set("recaptchaToken", token);
-      }
-
-      const res = await fetch("/api/lead", {
-        method: "POST",
-        body: formData,
-      });
-
-      const data = (await res.json().catch(() => null)) as
-        | { ok?: boolean; error?: string }
-        | null;
-
-      if (!res.ok || !data?.ok) {
-        setFormError(data?.error || "Could not submit your enquiry. Please try again.");
-        return;
-      }
-
-      track("joint_replacement_lead");
-      setSubmitted(true);
-      form.reset();
-    } catch {
-      setFormError("Something went wrong. Please try again.");
-    } finally {
-      setSubmitting(false);
-    }
-  }
+  const whatsappHref = getWhatsappHref();
 
   return (
     <main>
@@ -132,13 +27,13 @@ export default function Home() {
           <a className="brand" href="#">
             <img className="brandLogo" src="/logo.png" alt={company.brand} />
           </a>
-          <a
+          <Link
             className="navCta"
-            href="#consultation"
-            onClick={() => track("cta_click")}
+            href="/consultation"
+            onClick={() => trackClick("cta_click")}
           >
             Get Treatment Plan
-          </a>
+          </Link>
         </nav>
       </header>
 
@@ -146,7 +41,11 @@ export default function Home() {
         <div className="container heroGrid">
           <div className="heroCopy">
             <div className="eyebrow">JOINT REPLACEMENT • HYDERABAD, INDIA</div>
-            <h1>Move better.<br /><span>Explore joint replacement options.</span></h1>
+            <h1>
+              Move better.
+              <br />
+              <span>Explore joint replacement options.</span>
+            </h1>
             <p className="heroLead">
               Explore knee and hip replacement treatment options in India with coordinated
               care for international patients. Outcomes vary; specialist assessment required.
@@ -154,24 +53,37 @@ export default function Home() {
 
             <div className="urgency">
               <strong>Limited priority planning slots</strong>
-              <span>Subject to clinical suitability &amp; international-patient coordination capacity</span>
+              <span>
+                Subject to clinical suitability &amp; international-patient coordination
+                capacity
+              </span>
             </div>
 
             <div className="heroBullets">
-              <div><i>✓</i> Dedicated patient coordinator</div>
-              <div><i>✓</i> Free airport pickup &amp; drop</div>
-              <div><i>✓</i> Language interpreters</div>
-              <div><i>✓</i> Video consultation when suitable</div>
+              <div>
+                <i>✓</i> Dedicated patient coordinator
+              </div>
+              <div>
+                <i>✓</i> Free airport pickup &amp; drop
+              </div>
+              <div>
+                <i>✓</i> Language interpreters
+              </div>
+              <div>
+                <i>✓</i> Video consultation when suitable
+              </div>
             </div>
 
-            <a
+            <Link
               className="primaryBtn"
-              href="#consultation"
-              onClick={() => track("hero_cta_click")}
+              href="/consultation"
+              onClick={() => trackClick("hero_cta_click")}
             >
               Send Medical Reports →
-            </a>
-            <p className="microcopy">Get a preliminary review, video consult option &amp; treatment plan.</p>
+            </Link>
+            <p className="microcopy">
+              Get a preliminary review, video consult option &amp; treatment plan.
+            </p>
           </div>
 
           <div className="heroVisual">
@@ -203,7 +115,10 @@ export default function Home() {
               <div className="eyebrow">ESTIMATED PACKAGE PRICES</div>
               <h2>Joint replacement packages</h2>
             </div>
-            <p>Approximate estimates. Final confirmation follows specialist consultation and clinical assessment.</p>
+            <p>
+              Approximate estimates. Final confirmation follows specialist consultation and
+              clinical assessment.
+            </p>
           </div>
 
           <div className="packageGrid">
@@ -214,11 +129,21 @@ export default function Home() {
                 </div>
                 <h3>{p.name}</h3>
                 <div className="price">{p.price}</div>
-                <div className="stay">Hospital stay: <b>{p.stay}</b> in {p.note}</div>
-                <a href="#consultation" onClick={() => track("package_cta_click")}>Check eligibility →</a>
+                <div className="stay">
+                  Hospital stay: <b>{p.stay}</b> in {p.note}
+                </div>
+                <Link
+                  href="/consultation"
+                  onClick={() => trackClick("package_cta_click")}
+                >
+                  Check eligibility →
+                </Link>
               </article>
             ))}
           </div>
+          <p style={{ marginTop: 20 }}>
+            <Link href="/packages">View full packages page →</Link>
+          </p>
         </div>
       </section>
 
@@ -231,15 +156,13 @@ export default function Home() {
             </div>
           </div>
           <div className="includeGrid">
-            {[
-              ["01", "Joint replacement surgery", "As specified in the selected package above."],
-              ["02", "International-brand implant(s)", "Implants selected as part of the clinical plan."],
-              ["03", "Pharmacy & medical consumables", "Used during the included hospital stay."],
-              ["04", "Single-room accommodation", "For the stated package duration."],
-              ["05", "Patient meals", "During the included hospital stay."],
-            ].map(([n, t, d]) => (
+            {packageInclusions.map(([n, t, d]) => (
               <div className="include" key={n}>
-                <span>{n}</span><div><h3>{t}</h3><p>{d}</p></div>
+                <span>{n}</span>
+                <div>
+                  <h3>{t}</h3>
+                  <p>{d}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -248,18 +171,20 @@ export default function Home() {
             <div className="packageNote">
               <h3>Bilateral surgery packages</h3>
               <p>
-                The bilateral packages cover both joints, with surgery performed in two separate stages.
-                The stated hospital stay is the total included across both stages. The interval between
-                surgeries will be determined by the treating orthopaedic surgeon.
+                The bilateral packages cover both joints, with surgery performed in two
+                separate stages. The stated hospital stay is the total included across both
+                stages. The interval between surgeries will be determined by the treating
+                orthopaedic surgeon.
               </p>
             </div>
             <div className="packageNote warn">
               <h3>Please note</h3>
               <p>
-                These are approximate package estimates. The final treatment plan, implant selection,
-                and package confirmation will follow specialist consultation, clinical assessment, and
-                review of all relevant investigations. Any additional hospital stay or treatment beyond
-                the agreed package will be charged separately.
+                These are approximate package estimates. The final treatment plan, implant
+                selection, and package confirmation will follow specialist consultation,
+                clinical assessment, and review of all relevant investigations. Any additional
+                hospital stay or treatment beyond the agreed package will be charged
+                separately.
               </p>
             </div>
           </div>
@@ -275,24 +200,25 @@ export default function Home() {
             </div>
             <p>
               Support services arranged by {company.brand} for international patients.
-              Availability of video consultation depends on case suitability and specialist schedule.
+              Availability of video consultation depends on case suitability and specialist
+              schedule.
             </p>
           </div>
           <div className="includeGrid supportGrid">
-            {[
-              ["01", "Dedicated coordinator", "One point of contact for appointments, travel planning and on-ground support."],
-              ["02", "Free airport pickup & drop", "Airport transfers arranged for your arrival and departure in Hyderabad."],
-              ["03", "Language interpreters", "Interpreter support to help you communicate during consultations and hospital stay."],
-              ["04", "Video consultation*", "Remote specialist discussion when clinically suitable, before you travel."],
-            ].map(([n, t, d]) => (
+            {supportServices.map(([n, t, d]) => (
               <div className="include" key={n}>
-                <span>{n}</span><div><h3>{t}</h3><p>{d}</p></div>
+                <span>{n}</span>
+                <div>
+                  <h3>{t}</h3>
+                  <p>{d}</p>
+                </div>
               </div>
             ))}
           </div>
           <p className="supportNote">
-            *Video consultation is offered when appropriate after review of your reports and subject to
-            specialist availability. It does not replace in-person clinical assessment before surgery.
+            *Video consultation is offered when appropriate after review of your reports and
+            subject to specialist availability. It does not replace in-person clinical
+            assessment before surgery.
           </p>
         </div>
       </section>
@@ -306,14 +232,11 @@ export default function Home() {
             </div>
           </div>
           <div className="steps">
-            {[
-              ["1", "Send reports", "Share your scans, reports and treatment history."],
-              ["2", "Review & video option", "We coordinate a preliminary review; video consult when suitable."],
-              ["3", "Receive options", "Get hospital, doctor and package options."],
-              ["4", "Travel with support", "Coordinator, airport transfer, interpreters and stay planning."],
-            ].map(([n, t, d]) => (
+            {journeySteps.map(([n, t, d]) => (
               <div className="step" key={n}>
-                <b>{n}</b><h3>{t}</h3><p>{d}</p>
+                <b>{n}</b>
+                <h3>{t}</h3>
+                <p>{d}</p>
               </div>
             ))}
           </div>
@@ -326,73 +249,15 @@ export default function Home() {
             <div className="eyebrow light">START YOUR CASE REVIEW</div>
             <h2>Know your treatment options before you travel.</h2>
             <p>
-              Send your medical details and your dedicated coordinator can help with next steps,
-              expected stay, package options and — when suitable — a video consultation before travel.
+              Send your medical details and your dedicated coordinator can help with next
+              steps, expected stay, package options and — when suitable — a video consultation
+              before travel.
             </p>
-            <div className="secure">🔒 Your information is used for patient coordination and enquiry handling.</div>
+            <div className="secure">
+              🔒 Your information is used for patient coordination and enquiry handling.
+            </div>
           </div>
-
-          <form className="leadForm" onSubmit={submit}>
-            {submitted ? (
-              <div className="success">
-                <div className="successIcon">✓</div>
-                <h3>Request received</h3>
-                <p>Thank you. Our team will review the information you submitted and contact you regarding the next steps.</p>
-                <button type="button" onClick={() => setSubmitted(false)}>Submit another enquiry</button>
-              </div>
-            ) : (
-              <>
-                <h3>Get a free treatment review</h3>
-                <p className="formSub">Tell us a little about the patient.</p>
-                <input name="name" placeholder="Patient / caregiver name" required />
-                <div className="two">
-                  <input name="country" placeholder="Country" required />
-                  <input name="whatsapp" placeholder="WhatsApp number" required />
-                </div>
-                <select name="treatment" defaultValue="" required>
-                  <option value="" disabled>Select treatment</option>
-                  <option>Single knee replacement</option>
-                  <option>Bilateral knee replacement</option>
-                  <option>Single hip replacement</option>
-                  <option>Bilateral hip replacement</option>
-                  <option>Not sure — need guidance</option>
-                </select>
-                <select name="travel_timeline" defaultValue="" required>
-                  <option value="" disabled>When are you planning to travel to India?</option>
-                  <option>As soon as possible</option>
-                  <option>Within 1 month</option>
-                  <option>1–3 months</option>
-                  <option>3–6 months</option>
-                  <option>6+ months</option>
-                  <option>Not sure yet</option>
-                </select>
-                <textarea name="message" placeholder="Briefly describe the condition or treatment history" rows={3} />
-                <label className="upload">
-                  <span>📎</span>
-                  <div><b>Medical reports</b><small>Optional • PDF/JPG/PNG</small></div>
-                  <input type="file" name="reports" accept=".pdf,.jpg,.jpeg,.png" />
-                </label>
-                {formError ? <p className="formError">{formError}</p> : null}
-                <button className="submitBtn" type="submit" disabled={submitting}>
-                  {submitting ? "Sending…" : "Request My Treatment Plan →"}
-                </button>
-                <small className="formFine">
-                  By submitting, you agree to be contacted about your enquiry and accept our{" "}
-                  <a href="/privacy">Privacy Policy</a> and <a href="/terms">Terms of Service</a>.
-                  Package figures are estimates only and do not constitute medical advice.
-                  {recaptchaSiteKey ? (
-                    <>
-                      {" "}This site is protected by reCAPTCHA and the Google{" "}
-                      <a href="https://policies.google.com/privacy" target="_blank" rel="noreferrer">Privacy Policy</a>
-                      {" "}and{" "}
-                      <a href="https://policies.google.com/terms" target="_blank" rel="noreferrer">Terms of Service</a>
-                      {" "}apply.
-                    </>
-                  ) : null}
-                </small>
-              </>
-            )}
-          </form>
+          <LeadForm />
         </div>
       </section>
 
@@ -401,16 +266,43 @@ export default function Home() {
           <div className="eyebrow">COMMON QUESTIONS</div>
           <h2>Before you plan your treatment</h2>
           {[
-            ["Who provides the medical treatment?", `${company.brand} coordinates international patient support. Clinical care, surgery, and hospital services are provided by the treating hospital and licensed specialists after assessment. We do not operate an online pharmacy or remote prescribing service.`],
-            ["Are these final treatment prices?", "No. These are approximate package estimates. The final treatment plan, implant selection, and package confirmation will follow specialist consultation, clinical assessment, and review of all relevant investigations. Any additional hospital stay or treatment beyond the agreed package will be charged separately."],
-            ["Are treatment outcomes guaranteed?", "No. Individual results vary. Suitability for joint replacement and expected outcomes can only be determined by a qualified clinician after assessment."],
-            [`Can international patients get travel support?`, `Yes. ${company.brand} can arrange a dedicated coordinator, free airport pickup and drop, language interpreter support, accommodation and medical visa guidance.`],
-            ["Is video consultation available?", "Video consultation may be arranged when clinically suitable after your reports are reviewed, and subject to specialist availability. It does not replace in-person assessment before surgery."],
-            ["Can I send reports before travelling?", "Yes. You can submit your reports and treatment history through the enquiry form so the case can be reviewed before you make travel arrangements."],
-            ["What is included in the package?", "Package inclusions cover joint replacement surgery as specified, international-brand implant(s), pharmacy and medical consumables used during the included hospital stay, single-room accommodation for the stated duration, and patient meals during the included hospital stay."],
-            ["How do bilateral packages work?", "Bilateral packages cover both joints, with surgery performed in two separate stages. The stated hospital stay is the total included across both stages. The interval between surgeries will be determined by the treating orthopaedic surgeon."],
+            [
+              "Who provides the medical treatment?",
+              `${company.brand} coordinates international patient support. Clinical care, surgery, and hospital services are provided by the treating hospital and licensed specialists after assessment. We do not operate an online pharmacy or remote prescribing service.`,
+            ],
+            [
+              "Are these final treatment prices?",
+              "No. These are approximate package estimates. The final treatment plan, implant selection, and package confirmation will follow specialist consultation, clinical assessment, and review of all relevant investigations. Any additional hospital stay or treatment beyond the agreed package will be charged separately.",
+            ],
+            [
+              "Are treatment outcomes guaranteed?",
+              "No. Individual results vary. Suitability for joint replacement and expected outcomes can only be determined by a qualified clinician after assessment.",
+            ],
+            [
+              `Can international patients get travel support?`,
+              `Yes. ${company.brand} can arrange a dedicated coordinator, free airport pickup and drop, language interpreter support, accommodation and medical visa guidance.`,
+            ],
+            [
+              "Is video consultation available?",
+              "Video consultation may be arranged when clinically suitable after your reports are reviewed, and subject to specialist availability. It does not replace in-person assessment before surgery.",
+            ],
+            [
+              "Can I send reports before travelling?",
+              "Yes. You can submit your reports and treatment history through the enquiry form so the case can be reviewed before you make travel arrangements.",
+            ],
+            [
+              "What is included in the package?",
+              "Package inclusions cover joint replacement surgery as specified, international-brand implant(s), pharmacy and medical consumables used during the included hospital stay, single-room accommodation for the stated duration, and patient meals during the included hospital stay.",
+            ],
+            [
+              "How do bilateral packages work?",
+              "Bilateral packages cover both joints, with surgery performed in two separate stages. The stated hospital stay is the total included across both stages. The interval between surgeries will be determined by the treating orthopaedic surgeon.",
+            ],
           ].map(([q, a]) => (
-            <details key={q}><summary>{q}</summary><p>{a}</p></details>
+            <details key={q}>
+              <summary>{q}</summary>
+              <p>{a}</p>
+            </details>
           ))}
         </div>
       </section>
@@ -435,27 +327,31 @@ export default function Home() {
           </div>
           <div className="footerMeta">
             <strong>Ready to start?</strong>
-            <a href="#consultation" onClick={() => track("footer_cta_click")}>
+            <Link href="/consultation" onClick={() => trackClick("footer_cta_click")}>
               Get Treatment Plan →
-            </a>
+            </Link>
             <span>{company.cityLabel}</span>
             <a href={`mailto:${company.contactEmail}`}>{company.contactEmail}</a>
             <div className="footerLinks">
-              <a href="/privacy">Privacy Policy</a>
-              <a href="/terms">Terms of Service</a>
-              <a href="/advertising-disclosure">Advertising Disclosure</a>
+              <Link href="/packages">Packages</Link>
+              <Link href="/knee-replacement">Knee</Link>
+              <Link href="/hip-replacement">Hip</Link>
+              <Link href="/patient-support">Support</Link>
+              <Link href="/privacy">Privacy Policy</Link>
+              <Link href="/terms">Terms of Service</Link>
+              <Link href="/advertising-disclosure">Advertising Disclosure</Link>
             </div>
           </div>
         </div>
         <div className="adsDisclaimer">
           <div className="container">
             <p>
-              <strong>Healthcare advertising notice:</strong> {company.brand} is a
-              medical tourism coordination service operated by {company.legalEntity}{" "}
-              ({company.tradeName}). Package prices are estimates only. Content is not
-              medical advice and does not guarantee clinical outcomes. Treatment is
-              provided by hospitals and licensed specialists after assessment. See our{" "}
-              <a href="/advertising-disclosure">Advertising Disclosure</a>.
+              <strong>Healthcare advertising notice:</strong> {company.brand} is a medical
+              tourism coordination service operated by {company.legalEntity} (
+              {company.tradeName}). Package prices are estimates only. Content is not medical
+              advice and does not guarantee clinical outcomes. Treatment is provided by
+              hospitals and licensed specialists after assessment. See our{" "}
+              <Link href="/advertising-disclosure">Advertising Disclosure</Link>.
             </p>
           </div>
         </div>
@@ -465,7 +361,9 @@ export default function Home() {
               © {new Date().getFullYear()} {company.brand} · {company.tradeName} ·{" "}
               {company.website}
             </span>
-            <span>Package estimates only • Specialist confirmation required • No outcome guarantees</span>
+            <span>
+              Package estimates only • Specialist confirmation required • No outcome guarantees
+            </span>
           </div>
         </div>
       </footer>
@@ -475,7 +373,7 @@ export default function Home() {
         href={whatsappHref}
         target="_blank"
         rel="noreferrer"
-        onClick={() => track("whatsapp_click")}
+        onClick={() => trackClick("whatsapp_click")}
         aria-label="Chat on WhatsApp"
       >
         <svg viewBox="0 0 32 32" aria-hidden="true">
