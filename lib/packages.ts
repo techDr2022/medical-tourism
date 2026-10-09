@@ -1,7 +1,7 @@
 export const packages = [
   {
     name: "Single Knee Replacement",
-    price: "USD 2,900",
+    price: "USD 2,900–3,500",
     stay: "3 days",
     note: "single room",
     image: "/Single-Knee-Replacement.png",
@@ -9,7 +9,7 @@ export const packages = [
   },
   {
     name: "Bilateral Knee Replacement",
-    price: "USD 5,000",
+    price: "USD 5,000–5,500",
     stay: "6 days total",
     note: "single room • two stages",
     image: "/Bilateral-Knee-Replacement.png",
@@ -17,7 +17,7 @@ export const packages = [
   },
   {
     name: "Single Hip Replacement",
-    price: "USD 3,500",
+    price: "USD 3,500–4,000",
     stay: "4 days",
     note: "single room",
     image: "/Single-Hip-Replacement.png",
@@ -25,7 +25,7 @@ export const packages = [
   },
   {
     name: "Bilateral Hip Replacement",
-    price: "USD 6,500",
+    price: "USD 6,500–7,000",
     stay: "6 days total",
     note: "single room • two stages",
     image: "/Bilateral-Hip-Replacement.png",
@@ -43,7 +43,7 @@ export const packageInclusions = [
 
 export const supportServices = [
   ["01", "Dedicated coordinator", "One point of contact for appointments, travel planning and on-ground support."],
-  ["02", "Free airport pickup & drop", "Airport transfers arranged for your arrival and departure in Hyderabad."],
+  ["02", "Free airport pickup & drop", "Airport transfers arranged for your arrival and departure."],
   ["03", "Language interpreters", "Interpreter support to help you communicate during consultations and hospital stay."],
   ["04", "Video consultation*", "Remote specialist discussion when clinically suitable, before you travel."],
 ] as const;

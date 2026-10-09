@@ -2,6 +2,7 @@
 
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { company } from "@/lib/company";
+import { guidanceOption, treatmentGroups } from "@/lib/focus";
 
 const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
@@ -204,11 +205,14 @@ export function LeadForm({ defaultTreatment = "" }: LeadFormProps) {
             <option value="" disabled>
               Select treatment
             </option>
-            <option>Single knee replacement</option>
-            <option>Bilateral knee replacement</option>
-            <option>Single hip replacement</option>
-            <option>Bilateral hip replacement</option>
-            <option>Not sure — need guidance</option>
+            {treatmentGroups.map((group) => (
+              <optgroup key={group.label} label={group.label}>
+                {group.options.map((option) => (
+                  <option key={option}>{option}</option>
+                ))}
+              </optgroup>
+            ))}
+            <option>{guidanceOption}</option>
           </select>
           <select name="travel_timeline" defaultValue="" required>
             <option value="" disabled>
@@ -306,7 +310,7 @@ export function trackClick(eventName: string) {
 
 export function getWhatsappHref() {
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
-  const whatsappMessage = `Hello ${company.brand}, I am interested in joint replacement treatment.`;
+  const whatsappMessage = `Hello ${company.brand}, I am interested in orthopaedic or neurosurgery treatment.`;
   return whatsappNumber
     ? `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${encodeURIComponent(whatsappMessage)}`
     : `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`;

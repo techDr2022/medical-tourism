@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { MarketingShell } from "@/components/MarketingShell";
+import { SupportCards } from "@/components/SupportCards";
 import { company } from "@/lib/company";
-import { supportServices } from "@/lib/packages";
 
 export const metadata: Metadata = {
   title: `International Patient Support | ${company.brand}`,
   description:
-    "Dedicated coordinator, airport transfers, interpreters and video consultation support for international joint replacement patients in Hyderabad.",
+    "Dedicated coordinator, airport transfers, interpreters and video consultation support for international orthopaedic and neurosurgery patients.",
   alternates: { canonical: "/patient-support" },
 };
 
@@ -27,17 +27,7 @@ export default function PatientSupportPage() {
               schedule.
             </p>
           </div>
-          <div className="includeGrid supportGrid">
-            {supportServices.map(([n, t, d]) => (
-              <div className="include" key={n}>
-                <span>{n}</span>
-                <div>
-                  <h3>{t}</h3>
-                  <p>{d}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <SupportCards />
           <p className="supportNote">
             *Video consultation is offered when appropriate after review of your reports and
             subject to specialist availability. It does not replace in-person clinical

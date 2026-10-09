@@ -7,7 +7,7 @@ import { packages } from "@/lib/packages";
 export const metadata: Metadata = {
   title: `Knee Replacement in India | ${company.brand}`,
   description:
-    "Single and bilateral knee replacement package estimates in Hyderabad, India with international patient coordination.",
+    "Single and bilateral knee replacement package estimates in India with international patient coordination.",
   alternates: { canonical: "/knee-replacement" },
 };
 
@@ -19,7 +19,7 @@ export default function KneeReplacementPage() {
       <section className="hero">
         <div className="container heroGrid">
           <div className="heroCopy">
-            <div className="eyebrow">KNEE REPLACEMENT • HYDERABAD, INDIA</div>
+            <div className="eyebrow">KNEE REPLACEMENT • INDIA</div>
             <h1>
               Knee replacement
               <br />
@@ -27,7 +27,7 @@ export default function KneeReplacementPage() {
             </h1>
             <p className="heroLead">
               Explore single and bilateral knee replacement package estimates with coordinated
-              care in Hyderabad. Outcomes vary; specialist assessment required.
+              care in India. Outcomes vary; specialist assessment required.
             </p>
             <Link className="primaryBtn" href="/consultation">
               Send medical reports →
@@ -40,11 +40,11 @@ export default function KneeReplacementPage() {
             <div className="imageCard">
               <img
                 src="/Single-Knee-Replacement.png"
-                alt="Knee replacement treatment in Hyderabad"
+                alt="Knee replacement treatment in India"
               />
               <div className="visualBadge">
                 <small>PACKAGE ESTIMATES FROM</small>
-                <strong>USD 2,900</strong>
+                <strong>USD 2,900–3,500</strong>
                 <span>Single knee replacement</span>
               </div>
             </div>

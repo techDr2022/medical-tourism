@@ -6,6 +6,7 @@ import {
   companyLegalLine,
   companySignatoryLine,
 } from "@/lib/company";
+import { focusBlurb } from "@/lib/focus";
 import { getWhatsappHref, trackClick } from "@/components/LeadForm";
 
 export function MarketingShell({ children }: { children: React.ReactNode }) {
@@ -21,13 +22,17 @@ export function MarketingShell({ children }: { children: React.ReactNode }) {
           <Link className="brand" href="/">
             <img className="brandLogo" src="/logo.png" alt={company.brand} />
           </Link>
-          <Link
-            className="navCta"
-            href="/consultation"
-            onClick={() => trackClick("cta_click")}
-          >
-            Get Treatment Plan
-          </Link>
+          <div className="navLinks">
+            <Link href="/packages">Orthopaedics</Link>
+            <Link href="/neurosurgery">Neurosurgery</Link>
+            <Link
+              className="navCta"
+              href="/consultation"
+              onClick={() => trackClick("cta_click")}
+            >
+              Get Treatment Plan
+            </Link>
+          </div>
         </nav>
       </header>
 
@@ -37,10 +42,7 @@ export function MarketingShell({ children }: { children: React.ReactNode }) {
         <div className="container footerInner">
           <div className="footerBrand">
             <img className="brandLogo footerLogo" src="/logo.png" alt={company.brand} />
-            <p>
-              International patient coordination for joint replacement treatment in
-              Hyderabad, India.
-            </p>
+            <p>{focusBlurb}</p>
             <p className="footerLegal">
               {companyLegalLine}
               <br />
@@ -59,7 +61,8 @@ export function MarketingShell({ children }: { children: React.ReactNode }) {
             <span>{company.cityLabel}</span>
             <a href={`mailto:${company.contactEmail}`}>{company.contactEmail}</a>
             <div className="footerLinks">
-              <Link href="/packages">Packages</Link>
+              <Link href="/packages">Orthopaedics</Link>
+              <Link href="/neurosurgery">Neurosurgery</Link>
               <Link href="/knee-replacement">Knee</Link>
               <Link href="/hip-replacement">Hip</Link>
               <Link href="/patient-support">Patient Support</Link>

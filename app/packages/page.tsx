@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { InclusionCards } from "@/components/InclusionCards";
 import { MarketingShell } from "@/components/MarketingShell";
 import { company } from "@/lib/company";
-import { packageInclusions, packages } from "@/lib/packages";
+import { packages } from "@/lib/packages";
 
 export const metadata: Metadata = {
-  title: `Joint Replacement Packages | ${company.brand}`,
+  title: `Orthopaedic Packages | ${company.brand}`,
   description:
-    "Approximate knee and hip replacement package estimates in Hyderabad, India for international patients. Final confirmation follows specialist assessment.",
+    "Approximate knee and hip replacement package estimates in India. Neurosurgery cases are planned separately after specialist review.",
   alternates: { canonical: "/packages" },
 };
 
@@ -19,11 +20,11 @@ export default function PackagesPage() {
           <div className="sectionHead">
             <div>
               <div className="eyebrow">ESTIMATED PACKAGE PRICES</div>
-              <h1>Joint replacement packages</h1>
+              <h1>Orthopaedic joint replacement packages</h1>
             </div>
             <p>
-              Approximate estimates. Final confirmation follows specialist consultation and
-              clinical assessment.
+              Knee and hip estimates only. Neurosurgery cases are quoted after report review.
+              Final confirmation follows specialist consultation.
             </p>
           </div>
 
@@ -53,17 +54,7 @@ export default function PackagesPage() {
               <h2>Package inclusions</h2>
             </div>
           </div>
-          <div className="includeGrid">
-            {packageInclusions.map(([n, t, d]) => (
-              <div className="include" key={n}>
-                <span>{n}</span>
-                <div>
-                  <h3>{t}</h3>
-                  <p>{d}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <InclusionCards />
           <div className="packageNotes">
             <div className="packageNote">
               <h3>Bilateral surgery packages</h3>
@@ -84,6 +75,9 @@ export default function PackagesPage() {
             <Link className="primaryBtn" href="/consultation">
               Request a treatment plan →
             </Link>
+          </p>
+          <p style={{ marginTop: 16 }}>
+            <Link href="/neurosurgery">Neurosurgery cases are reviewed separately →</Link>
           </p>
         </div>
       </section>

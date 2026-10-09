@@ -40,7 +40,7 @@ export default function TermsPage() {
           <h2>Nature of services</h2>
           <p>
             {company.brand} provides international patient coordination and
-            information about joint replacement treatment options in India.
+            information about orthopaedic and neurosurgery treatment options in India.
             Package figures shown on the website are approximate estimates only
             and are not a final quotation, diagnosis, or medical advice.
           </p>

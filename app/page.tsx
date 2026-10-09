@@ -7,11 +7,13 @@ import {
   companySignatoryLine,
 } from "@/lib/company";
 import { LeadForm, getWhatsappHref, trackClick } from "@/components/LeadForm";
+import { InclusionCards } from "@/components/InclusionCards";
+import { SupportCards } from "@/components/SupportCards";
+import { NeuroCards } from "@/components/NeuroCards";
+import { focusBlurb } from "@/lib/focus";
 import {
   journeySteps,
-  packageInclusions,
   packages,
-  supportServices,
 } from "@/lib/packages";
 
 export default function Home() {
@@ -27,28 +29,32 @@ export default function Home() {
           <a className="brand" href="#">
             <img className="brandLogo" src="/logo.png" alt={company.brand} />
           </a>
-          <Link
-            className="navCta"
-            href="/consultation"
-            onClick={() => trackClick("cta_click")}
-          >
-            Get Treatment Plan
-          </Link>
+          <div className="navLinks">
+            <Link href="/packages">Orthopaedics</Link>
+            <Link href="/neurosurgery">Neurosurgery</Link>
+            <Link
+              className="navCta"
+              href="/consultation"
+              onClick={() => trackClick("cta_click")}
+            >
+              Get Treatment Plan
+            </Link>
+          </div>
         </nav>
       </header>
 
       <section className="hero">
         <div className="container heroGrid">
           <div className="heroCopy">
-            <div className="eyebrow">JOINT REPLACEMENT • HYDERABAD, INDIA</div>
+            <div className="eyebrow">ORTHOPAEDIC & NEUROSURGERY • INDIA</div>
             <h1>
-              Move better.
+              Specialist care
               <br />
-              <span>Explore joint replacement options.</span>
+              <span>you can trust in India.</span>
             </h1>
             <p className="heroLead">
-              Explore knee and hip replacement treatment options in India with coordinated
-              care for international patients. Outcomes vary; specialist assessment required.
+              A coordinator helps you plan knee, hip, spine, or brain treatment in India.
+              Clinical decisions stay with your specialist.
             </p>
 
             <div className="urgency">
@@ -88,11 +94,11 @@ export default function Home() {
 
           <div className="heroVisual">
             <div className="imageCard">
-              <img src="/banner.png" alt="Joint replacement medical tourism in Hyderabad" />
+              <img src="/banner.png" alt="Orthopaedic and neurosurgery medical tourism in India" />
               <div className="visualBadge">
-                <small>PACKAGE ESTIMATES FROM</small>
-                <strong>USD 2,900</strong>
-                <span>Knee replacement</span>
+                <small>ORTHOPAEDIC PACKAGES FROM</small>
+                <strong>USD 2,900–3,500</strong>
+                <span>Neurosurgery priced after review</span>
               </div>
             </div>
           </div>
@@ -108,11 +114,50 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section" id="packages">
+      <section className="section" id="specialties">
         <div className="container">
           <div className="sectionHead">
             <div>
-              <div className="eyebrow">ESTIMATED PACKAGE PRICES</div>
+              <div className="eyebrow">HOW WE HELP</div>
+              <h2>Orthopaedic and neurosurgery care</h2>
+            </div>
+            <p>
+              Joint replacement packages are published so you can plan. Neurosurgery is
+              arranged personally after a specialist reviews your reports.
+            </p>
+          </div>
+          <div className="packageGrid" style={{ gridTemplateColumns: "1fr 1fr" }}>
+            <article className="package">
+              <div className="jointArt">
+                <img src="/orthopedic.jpg" alt="Knee joint illustration for orthopaedic surgery" />
+              </div>
+              <h3>Orthopaedic surgery</h3>
+              <p className="stay">
+                Knee and hip replacement, single or bilateral, and other orthopaedic
+                treatment reviewed with you by a specialist.
+              </p>
+              <Link href="/packages">View joint replacement packages →</Link>
+            </article>
+            <article className="package">
+              <div className="jointArt">
+                <img src="/neurology.jpg" alt="Brain and spine illustration for neurosurgery" />
+              </div>
+              <h3>Neurosurgery</h3>
+              <p className="stay">
+                Spine and brain surgery, planned with you after your scans are reviewed.
+                There is no fixed public price.
+              </p>
+              <Link href="/neurosurgery">Explore neurosurgery care →</Link>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section className="section soft" id="packages">
+        <div className="container">
+          <div className="sectionHead">
+            <div>
+              <div className="eyebrow">ORTHOPAEDIC ESTIMATES</div>
               <h2>Joint replacement packages</h2>
             </div>
             <p>
@@ -147,6 +192,25 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="section" id="neurosurgery">
+        <div className="container">
+          <div className="sectionHead">
+            <div>
+              <div className="eyebrow">NEUROSURGERY</div>
+              <h2>A personal plan for every patient</h2>
+            </div>
+            <p>
+              Spine and brain surgery are not listed as fixed packages. Share your scans
+              and we will help you understand the next step.
+            </p>
+          </div>
+          <NeuroCards />
+          <p style={{ marginTop: 20 }}>
+            <Link href="/consultation">Talk with a coordinator →</Link>
+          </p>
+        </div>
+      </section>
+
       <section className="section soft">
         <div className="container">
           <div className="sectionHead">
@@ -155,17 +219,7 @@ export default function Home() {
               <h2>Package inclusions</h2>
             </div>
           </div>
-          <div className="includeGrid">
-            {packageInclusions.map(([n, t, d]) => (
-              <div className="include" key={n}>
-                <span>{n}</span>
-                <div>
-                  <h3>{t}</h3>
-                  <p>{d}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <InclusionCards />
 
           <div className="packageNotes">
             <div className="packageNote">
@@ -204,17 +258,7 @@ export default function Home() {
               schedule.
             </p>
           </div>
-          <div className="includeGrid supportGrid">
-            {supportServices.map(([n, t, d]) => (
-              <div className="include" key={n}>
-                <span>{n}</span>
-                <div>
-                  <h3>{t}</h3>
-                  <p>{d}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <SupportCards />
           <p className="supportNote">
             *Video consultation is offered when appropriate after review of your reports and
             subject to specialist availability. It does not replace in-person clinical
@@ -261,49 +305,60 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="faq section">
-        <div className="container narrow">
-          <div className="eyebrow">COMMON QUESTIONS</div>
-          <h2>Before you plan your treatment</h2>
-          {[
-            [
-              "Who provides the medical treatment?",
-              `${company.brand} coordinates international patient support. Clinical care, surgery, and hospital services are provided by the treating hospital and licensed specialists after assessment. We do not operate an online pharmacy or remote prescribing service.`,
-            ],
-            [
-              "Are these final treatment prices?",
-              "No. These are approximate package estimates. The final treatment plan, implant selection, and package confirmation will follow specialist consultation, clinical assessment, and review of all relevant investigations. Any additional hospital stay or treatment beyond the agreed package will be charged separately.",
-            ],
-            [
-              "Are treatment outcomes guaranteed?",
-              "No. Individual results vary. Suitability for joint replacement and expected outcomes can only be determined by a qualified clinician after assessment.",
-            ],
-            [
-              `Can international patients get travel support?`,
-              `Yes. ${company.brand} can arrange a dedicated coordinator, free airport pickup and drop, language interpreter support, accommodation and medical visa guidance.`,
-            ],
-            [
-              "Is video consultation available?",
-              "Video consultation may be arranged when clinically suitable after your reports are reviewed, and subject to specialist availability. It does not replace in-person assessment before surgery.",
-            ],
-            [
-              "Can I send reports before travelling?",
-              "Yes. You can submit your reports and treatment history through the enquiry form so the case can be reviewed before you make travel arrangements.",
-            ],
-            [
-              "What is included in the package?",
-              "Package inclusions cover joint replacement surgery as specified, international-brand implant(s), pharmacy and medical consumables used during the included hospital stay, single-room accommodation for the stated duration, and patient meals during the included hospital stay.",
-            ],
-            [
-              "How do bilateral packages work?",
-              "Bilateral packages cover both joints, with surgery performed in two separate stages. The stated hospital stay is the total included across both stages. The interval between surgeries will be determined by the treating orthopaedic surgeon.",
-            ],
-          ].map(([q, a]) => (
-            <details key={q}>
-              <summary>{q}</summary>
-              <p>{a}</p>
-            </details>
-          ))}
+      <section className="faq section soft">
+        <div className="container faqLayout">
+          <div className="faqIntro">
+            <div className="eyebrow">COMMON QUESTIONS</div>
+            <h2>Before you plan your treatment</h2>
+            <p>
+              Prices, travel support, and who provides the clinical care — answered before you enquire.
+            </p>
+            <a className="faqAsk" href="#consultation">
+              Ask a coordinator
+              <span aria-hidden="true">→</span>
+            </a>
+          </div>
+          <div className="faqList">
+            {[
+              [
+                "Who provides the medical treatment?",
+                `${company.brand} coordinates international patient support. Clinical care, surgery, and hospital services are provided by the treating hospital and licensed specialists after assessment. We do not operate an online pharmacy or remote prescribing service.`,
+              ],
+              [
+                "Are these final treatment prices?",
+                "No. These are approximate package estimates. The final treatment plan, implant selection, and package confirmation will follow specialist consultation, clinical assessment, and review of all relevant investigations. Any additional hospital stay or treatment beyond the agreed package will be charged separately.",
+              ],
+              [
+                "Are treatment outcomes guaranteed?",
+                "No. Individual results vary. Suitability for orthopaedic or neurosurgery and expected outcomes can only be determined by a qualified clinician after assessment.",
+              ],
+              [
+                "Can international patients get travel support?",
+                `Yes. ${company.brand} can arrange a dedicated coordinator, free airport pickup and drop, language interpreter support, accommodation and medical visa guidance.`,
+              ],
+              [
+                "Is video consultation available?",
+                "Video consultation may be arranged when clinically suitable after your reports are reviewed, and subject to specialist availability. It does not replace in-person assessment before surgery.",
+              ],
+              [
+                "Can I send reports before travelling?",
+                "Yes. You can submit your reports and treatment history through the enquiry form so the case can be reviewed before you make travel arrangements.",
+              ],
+              [
+                "What is included in the package?",
+                "Package inclusions cover joint replacement surgery as specified, international-brand implant(s), pharmacy and medical consumables used during the included hospital stay, single-room accommodation for the stated duration, and patient meals during the included hospital stay.",
+              ],
+              [
+                "How do bilateral packages work?",
+                "Bilateral packages cover both joints, with surgery performed in two separate stages. The stated hospital stay is the total included across both stages. The interval between surgeries will be determined by the treating orthopaedic surgeon.",
+              ],
+            ].map(([q, a]) => (
+              <details key={q}>
+                <summary>{q}</summary>
+                <p>{a}</p>
+              </details>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -311,10 +366,7 @@ export default function Home() {
         <div className="container footerInner">
           <div className="footerBrand">
             <img className="brandLogo footerLogo" src="/logo.png" alt={company.brand} />
-            <p>
-              International patient coordination for joint replacement treatment in
-              Hyderabad, India.
-            </p>
+            <p>{focusBlurb}</p>
             <p className="footerLegal">
               {companyLegalLine}
               <br />
@@ -333,7 +385,8 @@ export default function Home() {
             <span>{company.cityLabel}</span>
             <a href={`mailto:${company.contactEmail}`}>{company.contactEmail}</a>
             <div className="footerLinks">
-              <Link href="/packages">Packages</Link>
+              <Link href="/packages">Orthopaedics</Link>
+              <Link href="/neurosurgery">Neurosurgery</Link>
               <Link href="/knee-replacement">Knee</Link>
               <Link href="/hip-replacement">Hip</Link>
               <Link href="/patient-support">Support</Link>

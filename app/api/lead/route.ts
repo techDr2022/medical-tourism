@@ -80,7 +80,7 @@ function buildLeadNotificationHtml(params: {
 
   return `
     <div style="font-family:Arial,Helvetica,sans-serif;line-height:1.5;color:#10243b">
-      <h2 style="margin:0 0 12px">New joint replacement enquiry</h2>
+      <h2 style="margin:0 0 12px">New orthopaedic or neurosurgery enquiry</h2>
       <p style="margin:0 0 16px;color:#64748b">Submitted from ${company.website} · ${escapeHtml(submittedAt)} IST</p>
       <table style="border-collapse:collapse;width:100%;max-width:640px">
         ${rows
@@ -155,7 +155,7 @@ function buildConfirmationHtml(params: {
                 We received your enquiry
               </h1>
               <p style="margin:12px 0 0;font-size:14px;line-height:1.55;color:#c7d3df">
-                Joint replacement care coordination · Hyderabad, India
+                Orthopaedic and neurosurgery coordination · India
               </p>
             </td>
           </tr>
@@ -342,7 +342,7 @@ export async function POST(request: Request) {
       subject: `New lead: ${treatment} — ${name}`,
       html: leadHtml,
       text: [
-        "New joint replacement enquiry",
+        "New orthopaedic or neurosurgery enquiry",
         `Name: ${name}`,
         `Email: ${email}`,
         `Country: ${country}`,
@@ -357,7 +357,7 @@ export async function POST(request: Request) {
         ? attachments.map((a) => ({ filename: a.filename, content: a.content }))
         : undefined,
       tags: [
-        { name: "source", value: "joint_replacement_landing" },
+        { name: "source", value: "ortho_neuro_landing" },
         { name: "type", value: "lead_notification" },
         { name: "treatment", value: treatment.slice(0, 50).replace(/[^a-zA-Z0-9_-]/g, "_") },
       ],
@@ -384,7 +384,7 @@ export async function POST(request: Request) {
       text: [
         `Dear ${name.split(/\s+/)[0] || name},`,
         "",
-        `Thank you for contacting ${company.brand}. We have received your joint replacement enquiry.`,
+        `Thank you for contacting ${company.brand}. We have received your orthopaedic or neurosurgery enquiry.`,
         "",
         `Treatment interest: ${treatment}`,
         `Travel timeline: ${travelTimeline}`,
@@ -402,7 +402,7 @@ export async function POST(request: Request) {
         siteUrl,
       ].join("\n"),
       tags: [
-        { name: "source", value: "joint_replacement_landing" },
+        { name: "source", value: "ortho_neuro_landing" },
         { name: "type", value: "lead_confirmation" },
       ],
     });

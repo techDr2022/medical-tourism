@@ -7,7 +7,7 @@ import { packages } from "@/lib/packages";
 export const metadata: Metadata = {
   title: `Hip Replacement in India | ${company.brand}`,
   description:
-    "Single and bilateral hip replacement package estimates in Hyderabad, India with international patient coordination.",
+    "Single and bilateral hip replacement package estimates in India with international patient coordination.",
   alternates: { canonical: "/hip-replacement" },
 };
 
@@ -19,7 +19,7 @@ export default function HipReplacementPage() {
       <section className="hero">
         <div className="container heroGrid">
           <div className="heroCopy">
-            <div className="eyebrow">HIP REPLACEMENT • HYDERABAD, INDIA</div>
+            <div className="eyebrow">HIP REPLACEMENT • INDIA</div>
             <h1>
               Hip replacement
               <br />
@@ -27,7 +27,7 @@ export default function HipReplacementPage() {
             </h1>
             <p className="heroLead">
               Explore single and bilateral hip replacement package estimates with coordinated
-              care in Hyderabad. Outcomes vary; specialist assessment required.
+              care in India. Outcomes vary; specialist assessment required.
             </p>
             <Link className="primaryBtn" href="/consultation">
               Send medical reports →
@@ -40,11 +40,11 @@ export default function HipReplacementPage() {
             <div className="imageCard">
               <img
                 src="/Single-Hip-Replacement.png"
-                alt="Hip replacement treatment in Hyderabad"
+                alt="Hip replacement treatment in India"
               />
               <div className="visualBadge">
                 <small>PACKAGE ESTIMATES FROM</small>
-                <strong>USD 3,500</strong>
+                <strong>USD 3,500–4,000</strong>
                 <span>Single hip replacement</span>
               </div>
             </div>

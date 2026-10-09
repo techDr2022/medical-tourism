@@ -6,7 +6,7 @@ import { company } from "@/lib/company";
 export const metadata: Metadata = {
   title: `Free Consultation | ${company.brand}`,
   description:
-    "Request a free joint replacement treatment review for international patients. Send reports for preliminary options in Hyderabad, India.",
+    "Request a free review for orthopaedic or neurosurgery cases. Send reports for preliminary options in India.",
   alternates: { canonical: "/consultation" },
 };
 

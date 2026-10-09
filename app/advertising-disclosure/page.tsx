@@ -47,7 +47,7 @@ export default function AdvertisingDisclosurePage() {
           <h2>Nature of the advertised service</h2>
           <p>
             {company.brand} provides international patient coordination and
-            information about joint replacement treatment options in India. We
+            information about orthopaedic and neurosurgery treatment options in India. We
             are a medical tourism facilitation / coordination service. Clinical
             diagnosis, surgery, and hospital care are provided by treating
             hospitals and licensed specialists after appropriate assessment.
@@ -78,7 +78,7 @@ export default function AdvertisingDisclosurePage() {
           <p>
             Individual results vary. Nothing on this website or in related ads
             guarantees pain elimination, surgical success, recovery time, or any
-            specific clinical outcome. Suitability for joint replacement and
+            specific clinical outcome. Suitability for orthopaedic or neurosurgery and
             expected results can be determined only by a qualified clinician.
           </p>
         </section>

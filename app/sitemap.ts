@@ -7,6 +7,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const paths = [
     "/",
     "/packages",
+    "/neurosurgery",
     "/knee-replacement",
     "/hip-replacement",
     "/patient-support",

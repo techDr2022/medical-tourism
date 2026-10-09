@@ -7,15 +7,15 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || company.websiteUrl;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: `Joint Replacement in India | ${company.brand}`,
-  description: `Get a treatment plan for knee or hip replacement in Hyderabad, India. International patient coordination, travel support and transparent package estimates from ${company.brand}.`,
+  title: `Orthopaedic & Neurosurgery in India | ${company.brand}`,
+  description: `Treatment plans for orthopaedic and neurosurgery cases in India. Knee and hip package estimates, plus spine and brain surgery reviewed individually by ${company.brand}.`,
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: `Joint Replacement in India | ${company.brand}`,
+    title: `Orthopaedic & Neurosurgery in India | ${company.brand}`,
     description:
-      "Explore knee and hip replacement treatment options in India with coordinated care for international patients.",
+      "International coordination for orthopaedic surgery and neurosurgery cases in India.",
     url: siteUrl,
     siteName: company.brand,
     type: "website",
@@ -35,8 +35,6 @@ const organizationJsonLd = {
     "@type": "PostalAddress",
     streetAddress:
       "Behind Sai Ram Theater, 13-1/37, Sai Ram Theater Road, Sai Puri Colony",
-    addressLocality: "Secunderabad",
-    addressRegion: "Telangana",
     postalCode: "500047",
     addressCountry: "IN",
   },

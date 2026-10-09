@@ -7,7 +7,7 @@ import { journeySteps } from "@/lib/packages";
 export const metadata: Metadata = {
   title: `How It Works | ${company.brand}`,
   description:
-    "From medical reports to treatment: how international patients plan knee or hip replacement in Hyderabad with Medical Tours India.",
+    "From medical reports to treatment: how international patients plan orthopaedic or neurosurgery care in India.",
   alternates: { canonical: "/how-it-works" },
 };
 

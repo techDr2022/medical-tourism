@@ -16,8 +16,8 @@ export const company = {
   pan: "DEMPG0503M",
   tan: "HYDA42965G",
   registeredAddress:
-    "Behind Sai Ram Theater, 13-1/37, Sai Ram Theater Road, Sai Puri Colony, Secunderabad, Medchal Malkajgiri, Telangana – 500047",
-  cityLabel: "Secunderabad, Hyderabad, India",
+    "Behind Sai Ram Theater, 13-1/37, Sai Ram Theater Road, Sai Puri Colony, India – 500047",
+  cityLabel: "India",
 } as const;
 
 export const companyDisplayName = company.brand;
