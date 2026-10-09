@@ -44,6 +44,15 @@ async function verifyRecaptcha(token: string, action: string) {
   return { ok: true as const, score: data.score };
 }
 
+function getWhatsappHref() {
+  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
+  const whatsappMessage = `Hello ${company.brand}, I submitted an enquiry and would like a quicker response.`;
+  const digits = whatsappNumber.replace(/\D/g, "");
+  return digits
+    ? `https://wa.me/${digits}?text=${encodeURIComponent(whatsappMessage)}`
+    : `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`;
+}
+
 function buildLeadNotificationHtml(params: {
   name: string;
   email: string;
@@ -123,6 +132,7 @@ function buildConfirmationHtml(params: {
   } = params;
 
   const firstName = name.split(/\s+/)[0] || name;
+  const whatsappHref = getWhatsappHref();
   const detailRows: [string, string][] = [
     ["Treatment interest", treatment],
     ["Travel timeline", travelTimeline],
@@ -169,6 +179,18 @@ function buildConfirmationHtml(params: {
                 received your request and will review your details shortly. When suitable, we may
                 follow up for reports, a preliminary review, or a video consultation option.
               </p>
+              <p style="margin:0 0 16px;font-size:15px;line-height:1.65;color:#10243b">
+                Don't hesitate. You are in safe hands. WhatsApp us for a quicker response.
+              </p>
+              <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 22px">
+                <tr>
+                  <td style="border-radius:10px;background:#128C7E">
+                    <a href="${escapeHtml(whatsappHref)}" style="display:inline-block;padding:13px 20px;color:#ffffff;text-decoration:none;font-size:14px;font-weight:700">
+                      WhatsApp us
+                    </a>
+                  </td>
+                </tr>
+              </table>
 
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f5f8f7;border:1px solid #e3eaf0;border-radius:14px;margin:0 0 22px">
                 <tr>
@@ -385,6 +407,9 @@ export async function POST(request: Request) {
         `Dear ${name.split(/\s+/)[0] || name},`,
         "",
         `Thank you for contacting ${company.brand}. We have received your orthopaedic or neurosurgery enquiry.`,
+        "",
+        "Don't hesitate. You are in safe hands. WhatsApp us for a quicker response:",
+        getWhatsappHref(),
         "",
         `Treatment interest: ${treatment}`,
         `Travel timeline: ${travelTimeline}`,

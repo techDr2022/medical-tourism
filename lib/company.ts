@@ -8,10 +8,10 @@ export const company = {
   /** Public site domain (Hostinger / Google Ads destination) */
   website: "healthtourism.techdr.in",
   websiteUrl: "https://healthtourism.techdr.in",
-  /** Contact & transactional email domain (different from public site) */
-  emailDomain: "medicaltoursindia.com",
+  /** Verified Resend sending domain (public site host is healthtourism.techdr.in) */
+  emailDomain: "medicaltourism.techdr.in",
   contactEmail: "hi@medicaltoursindia.com",
-  noreplyEmail: "noreply@medicaltoursindia.com",
+  noreplyEmail: "noreply@medicaltourism.techdr.in",
   gstin: "36DEMPG0503M1ZI",
   pan: "DEMPG0503M",
   tan: "HYDA42965G",
