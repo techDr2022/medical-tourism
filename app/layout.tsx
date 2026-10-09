@@ -9,6 +9,11 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: `Orthopaedic & Neurosurgery in India | ${company.brand}`,
   description: `Treatment plans for orthopaedic and neurosurgery cases in India. Knee and hip package estimates, plus spine and brain surgery reviewed individually by ${company.brand}.`,
+  icons: {
+    icon: [{ url: "/favicon.png", type: "image/png", sizes: "1200x1200" }],
+    apple: [{ url: "/favicon.png", type: "image/png", sizes: "180x180" }],
+    shortcut: ["/favicon.png"],
+  },
   alternates: {
     canonical: "/",
   },
@@ -48,20 +53,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <head>
         {/* Google Tag Manager */}
-        <Script id="google-tag-manager" strategy="beforeInteractive">
-          {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-KVTGKN47');`}
-        </Script>
+})(window,document,'script','dataLayer','GTM-5GMM5PVG');`,
+          }}
+        />
         {/* End Google Tag Manager */}
       </head>
       <body>
         {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-KVTGKN47"
+            src="https://www.googletagmanager.com/ns.html?id=GTM-5GMM5PVG"
             height="0"
             width="0"
             style={{ display: "none", visibility: "hidden" }}
