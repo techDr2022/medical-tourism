@@ -387,6 +387,7 @@ export default function Home() {
             <div className="footerLinks">
               <Link href="/packages">Orthopaedics</Link>
               <Link href="/neurosurgery">Neurosurgery</Link>
+              <Link href="/spine-surgery">Spine</Link>
               <Link href="/knee-replacement">Knee</Link>
               <Link href="/hip-replacement">Hip</Link>
               <Link href="/patient-support">Support</Link>

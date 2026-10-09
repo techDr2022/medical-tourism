@@ -1,9 +1,11 @@
 import { neuroCases } from "@/lib/focus";
 
-export function NeuroCards() {
+type NeuroCase = (typeof neuroCases)[number];
+
+export function NeuroCards({ cases = neuroCases }: { cases?: readonly NeuroCase[] }) {
   return (
     <div className="includeGrid">
-      {neuroCases.map((item) => (
+      {cases.map((item) => (
         <div className="include supportCard" key={item.name}>
           {item.image ? (
             <img className="neuroIcon" src={item.image} alt="" />

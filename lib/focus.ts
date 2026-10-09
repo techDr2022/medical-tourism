@@ -22,6 +22,9 @@ export const treatmentGroups = [
   },
 ] as const;
 
+const spineOptionNames: readonly string[] =
+  treatmentGroups.find((group) => group.label === "Spine surgery")?.options ?? [];
+
 export const guidanceOption = "Not sure — need guidance";
 
 export const neuroCases = [
@@ -61,3 +64,5 @@ export const neuroCases = [
     image: "",
   },
 ] as const;
+
+export const spineCases = neuroCases.filter((item) => spineOptionNames.includes(item.name));

@@ -6,8 +6,8 @@ export const company = {
   authorizedSignatory: "Ms. Gorityala Abhista Sai",
   authorizedSignatoryTitle: "Proprietor/CEO",
   /** Public site domain (Hostinger / Google Ads destination) */
-  website: "medicaltourism.techdr.in",
-  websiteUrl: "https://medicaltourism.techdr.in",
+  website: "healthtourism.techdr.in",
+  websiteUrl: "https://healthtourism.techdr.in",
   /** Contact & transactional email domain (different from public site) */
   emailDomain: "medicaltoursindia.com",
   contactEmail: "hi@medicaltoursindia.com",

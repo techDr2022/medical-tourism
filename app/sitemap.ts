@@ -8,6 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/",
     "/packages",
     "/neurosurgery",
+    "/spine-surgery",
     "/knee-replacement",
     "/hip-replacement",
     "/patient-support",
